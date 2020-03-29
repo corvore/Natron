@@ -250,32 +250,47 @@ cat "${TMP_BINARIES_PATH}/docs/natron/LICENSE.txt" > "$NATRON_PACKAGE_PATH/meta/
 compat_version_script=3.4.19
 compat_version=3.4.19
 case "${TC_GCC:-}" in
+    4.4.[2-9])
+        compat_version=3.4.13
+        ;;
+    4.5.*)
+        compat_version=3.4.14
+        ;;
+    4.6.0)
+        compat_version=3.4.15
+        ;;
+    4.6.[1-9])
+        compat_version=3.4.16
+        ;;
     4.7.*)
         compat_version=3.4.17
         ;;
-    4.8.[012])
+    4.8.[0-2])
         compat_version=3.4.18
         ;;
-    4.8.[3456789])
+    4.8.[3-9])
         compat_version=3.4.19
         ;;
     4.9.*|5.0.*)
         compat_version=3.4.20
         ;;
-    5.[123456789].*|6.0.*)
+    5.[1-9].*|6.0.*)
         compat_version=3.4.21
         ;;
-    6.[123456789].*|7.0*)
+    6.[1-9].*|7.0*)
         compat_version=3.4.22
         ;;
     7.1.*)
         compat_version=3.4.23
         ;;
-    7.2.*)
+    7.[2-9].*)
         compat_version=3.4.24
         ;;
-    8.*|9.*)
+    8.*)
         compat_version=3.4.25
+        ;;
+    9.*)
+        compat_version=3.4.26
         ;;
 esac
 
@@ -335,6 +350,17 @@ for location in "${COPY_LOCATIONS[@]}"; do
         cp "$b" "$location/bin/"
     done
 
+    # If the binary contains upper case letters, make a symbolic link.
+    # Solves https://github.com/NatronGitHub/Natron/issues/225
+    for b in Natron NatronRenderer NatronProjectConverter; do
+        if [ -f "$location/bin/$b" ]; then
+            fname="$(basename "$b")"
+            fnamel="$(echo "$fname" | tr '[:upper:]' '[:lower:]')" # https://stackoverflow.com/a/2264537
+            if [ "$fname" != "$fnamel" ]; then
+                ln -s "$fname" "$location/bin/$fnamel"
+            fi
+        fi
+    done
     # end for all locations
 done
 

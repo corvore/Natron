@@ -3,16 +3,18 @@
 # x265
 # see http://www.linuxfromscratch.org/blfs/view/svn/multimedia/x265.html
 # and https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/x265
-X265_VERSION=3.2
+X265_VERSION=3.3
 X265_TAR="x265_${X265_VERSION}.tar.gz"
 X265_SITE="https://bitbucket.org/multicoreware/x265/downloads"
+if download_step; then
+    download "$X265_SITE" "$X265_TAR"
+fi
 if build_step && { force_build || { [ "${REBUILD_X265:-}" = "1" ]; }; }; then
     rm -rf "$SDK_HOME"/lib/libx265* || true
     rm -rf "$SDK_HOME"/lib/pkgconfig/x265* || true
 fi
 if build_step && { force_build || { [ ! -s "$SDK_HOME/lib/pkgconfig/x265.pc" ] || [ "$(pkg-config --modversion x265)" != "$X265_VERSION" ]; }; }; then
     start_build
-    download "$X265_SITE" "$X265_TAR"
     untar "$SRC_PATH/$X265_TAR"
     pushd "x265_$X265_VERSION"
     for d in 8 $([[ "$ARCH" == "x86_64" ]] && echo "10 12"); do

@@ -103,6 +103,7 @@ The following sections contain documentation about every node in the GMIC group.
     plugins/eu.gmic.DistanceTransform.rst
     plugins/eu.gmic.DistortLens.rst
     plugins/eu.gmic.Dithering.rst
+    plugins/eu.gmic.DragonCurve.rst
     plugins/eu.gmic.DrawnMontage.rst
     plugins/eu.gmic.DropShadow.rst
     plugins/eu.gmic.DropShadow3D.rst
@@ -198,7 +199,7 @@ The following sections contain documentation about every node in the GMIC group.
     plugins/eu.gmic.MandelbrotJuliaSets.rst
     plugins/eu.gmic.Marble.rst
     plugins/eu.gmic.Maze.rst
-    plugins/eu.gmic.MessWithBits.rst
+    plugins/eu.gmic.MesswithBits.rst
     plugins/eu.gmic.MightyDetails.rst
     plugins/eu.gmic.MineralMosaic.rst
     plugins/eu.gmic.Ministeck.rst
@@ -214,6 +215,7 @@ The following sections contain documentation about every node in the GMIC group.
     plugins/eu.gmic.Mosaic.rst
     plugins/eu.gmic.MultiscaleOperator.rst
     plugins/eu.gmic.NeonLightning.rst
+    plugins/eu.gmic.NewtonFractal.rst
     plugins/eu.gmic.NoiseAdditive.rst
     plugins/eu.gmic.NoisePerlin.rst
     plugins/eu.gmic.NoiseSpread.rst
@@ -278,6 +280,7 @@ The following sections contain documentation about every node in the GMIC group.
     plugins/eu.gmic.SharpenDeblur.rst
     plugins/eu.gmic.SharpenGoldMeinel.rst
     plugins/eu.gmic.SharpenInverseDiffusion.rst
+    plugins/eu.gmic.SharpenMultiscale.rst
     plugins/eu.gmic.SharpenOctaveSharpening.rst
     plugins/eu.gmic.SharpenRichardsonLucy.rst
     plugins/eu.gmic.SharpenShockFilters.rst
@@ -323,6 +326,7 @@ The following sections contain documentation about every node in the GMIC group.
     plugins/eu.gmic.StereographicProjection.rst
     plugins/eu.gmic.Streak.rst
     plugins/eu.gmic.Stroke.rst
+    plugins/eu.gmic.Stylize.rst
     plugins/eu.gmic.SuperPixels.rst
     plugins/eu.gmic.Superformula.rst
     plugins/eu.gmic.Symmetric2DShape.rst
@@ -342,6 +346,7 @@ The following sections contain documentation about every node in the GMIC group.
     plugins/eu.gmic.ToneMappingFast.rst
     plugins/eu.gmic.TonestoLayers.rst
     plugins/eu.gmic.TransferColorsHistogram.rst
+    plugins/eu.gmic.TransferColorsPCA.rst
     plugins/eu.gmic.TransferColorsVariational.rst
     plugins/eu.gmic.Truchet.rst
     plugins/eu.gmic.Tunnel.rst

@@ -1,6 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
  * This file is part of Natron <https://natrongithub.github.io/>,
  * Copyright (C) 2013-2018 INRIA and Alexandre Gauthier-Foichat
+ * Copyright (C) 2018-2020 The Natron developers
  *
  * Natron is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,7 +243,7 @@ CLANG_DIAG_ON(uninitialized)
 #define kFilterRifman "Rifman"
 #define kFilterRifmanHint "Some smoothing, plus significant sharpening (*)."
 #define kFilterMitchell "Mitchell"
-#define kFilterMitchellHint "Some smoothing, plus blurring to hide pixelation (*+)."
+#define kFilterMitchellHint "Some smoothing, plus blurring to hide pixelation (*)(+)."
 #define kFilterParzen "Parzen"
 #define kFilterParzenHint "(cubic B-spline) Greatest smoothing of all filters (+)."
 #define kFilterNotch "Notch"

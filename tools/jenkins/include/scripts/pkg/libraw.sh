@@ -2,14 +2,18 @@
 
 # Install libraw
 # see http://www.linuxfromscratch.org/blfs/view/cvs/general/libraw.html
-# do not install 0.19, which dropped support for the demosaic packs
-LIBRAW_VERSION=0.18.13
+LIBRAW_VERSION=0.18.13 # DO NOT INSTALL 0.19.x, which dropped support for the demosaic packs
 LIBRAW_PACKS_VERSION="${LIBRAW_VERSION}"
 LIBRAW_PACKS_VERSION=0.18.8
 LIBRAW_TAR="LibRaw-${LIBRAW_VERSION}.tar.gz"
 LIBRAW_DEMOSAIC_PACK_GPL2="LibRaw-demosaic-pack-GPL2-${LIBRAW_PACKS_VERSION}.tar.gz"
 LIBRAW_DEMOSAIC_PACK_GPL3="LibRaw-demosaic-pack-GPL3-${LIBRAW_PACKS_VERSION}.tar.gz"
 LIBRAW_SITE="https://www.libraw.org/data"
+if download_step; then
+    download "$LIBRAW_SITE" "$LIBRAW_TAR"
+    download "$LIBRAW_SITE" "$LIBRAW_DEMOSAIC_PACK_GPL2"
+    download "$LIBRAW_SITE" "$LIBRAW_DEMOSAIC_PACK_GPL3"
+fi
 if build_step && { force_build || { [ "${REBUILD_LIBRAW:-}" = "1" ]; }; }; then
     rm -rf "$SDK_HOME"/libraw-gpl3 || true
     rm -rf "$SDK_HOME"/libraw-gpl2 || true
@@ -17,9 +21,6 @@ if build_step && { force_build || { [ "${REBUILD_LIBRAW:-}" = "1" ]; }; }; then
 fi
 if build_step && { force_build || { [ ! -s "$SDK_HOME/libraw-gpl2/lib/pkgconfig/libraw.pc" ] || [ "$(env PKG_CONFIG_PATH=$SDK_HOME/libraw-gpl2/lib/pkgconfig:$PKG_CONFIG_PATH pkg-config --modversion libraw)" != "$LIBRAW_VERSION" ]; }; }; then
     start_build
-    download "$LIBRAW_SITE" "$LIBRAW_TAR"
-    download "$LIBRAW_SITE" "$LIBRAW_DEMOSAIC_PACK_GPL2"
-    download "$LIBRAW_SITE" "$LIBRAW_DEMOSAIC_PACK_GPL3"
     untar "$SRC_PATH/$LIBRAW_TAR"
     pushd "LibRaw-${LIBRAW_VERSION}"
     untar "$SRC_PATH/$LIBRAW_DEMOSAIC_PACK_GPL2"

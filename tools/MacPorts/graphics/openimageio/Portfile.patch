@@ -1,24 +1,23 @@
---- Portfile.orig	2019-08-24 19:27:32.000000000 -0700
-+++ Portfile	2019-08-25 21:16:40.000000000 -0700
-@@ -2,13 +2,13 @@
+--- Portfile.orig	2020-03-09 11:42:05.000000000 -0700
++++ Portfile	2020-03-09 11:46:01.000000000 -0700
+@@ -2,12 +2,12 @@
  
- PortSystem          1.0
- PortGroup           github 1.0
--PortGroup           qt5 1.0
-+#PortGroup           qt5 1.0
- PortGroup           cmake 1.1
- PortGroup           cxx11 1.1
- PortGroup           active_variants 1.1
+ PortSystem              1.0
+ PortGroup               github 1.0
+-PortGroup               qt5 1.0
++#PortGroup               qt5 1.0
+ PortGroup               cmake 1.1
+ PortGroup               active_variants 1.1
  
- github.setup        OpenImageIO oiio 2.0.10
--revision            0
-+revision            100
- name                openimageio
- categories          graphics
- license             BSD
-@@ -25,6 +25,11 @@
- distname            Release-${version}
- worksrcdir          oiio-Release-${version}
+ github.setup            OpenImageIO oiio 2.1.11.2
+-revision                0
++revision                100
+ name                    openimageio
+ categories              graphics
+ license                 BSD
+@@ -26,6 +26,11 @@
+ distname                Release-${version}
+ worksrcdir              oiio-Release-${version}
  
 +patch.pre_args  -p1
 +patchfiles \
@@ -27,42 +26,24 @@
 +
  # avoid
  #    ccache: error: Failed to create directory ${prefix}/var/macports/build/.ccache/tmp: Operation not permitted
- configure.args-append \
-@@ -39,19 +44,104 @@
-     port:zlib \
-     port:bzip2 \
-     port:boost \
--    port:jpeg \
-+    path:lib/libjpeg.dylib:jpeg \
-     port:libpng \
-     port:tiff \
-     port:ilmbase \
-+    port:giflib \
-+    port:libraw \
-+    port:webp \
-     port:openexr
+ configure.args-append   -DUSE_CCACHE=OFF
+@@ -37,7 +42,7 @@
+                         port:zlib \
+                         port:bzip2 \
+                         port:boost \
+-                        port:jpeg \
++                        path:lib/libjpeg.dylib:jpeg \
+                         port:libpng \
+                         port:tiff \
+                         port:ilmbase \
+@@ -46,12 +51,135 @@
  
-+configure.args-append \
-+    -DOIIO_BUILD_TESTS:BOOL=FALSE \
-+    -DBOOST_ROOT=${prefix} \
-+    -DUSE_QT:BOOL=FALSE \
-+    -DUSE_PYTHON:BOOL=FALSE \
-+    -DUSE_PYTHON3:BOOL=FALSE \
-+    -DUSE_FIELD3D:BOOL=FALSE \
-+    -DUSE_FFMPEG:BOOL=FALSE \
-+    -DUSE_OPENJPEG:BOOL=FALSE \
-+    -DUSE_OCIO:BOOL=FALSE \
-+    -DUSE_OPENCV:BOOL=FALSE \
-+    -DUSE_OPENSSL:BOOL=FALSE \
-+    -DUSE_FREETYPE:BOOL=FALSE \
-+    -DUSE_GIF:BOOL=TRUE \
-+    -DUSE_PTEX:BOOL=FALSE \
-+    -DUSE_LIBRAW:BOOL=TRUE \
-+    -DUSE_NUKE:BOOL=FALSE \
-+    -DUSE_OPENGL:BOOL=FALSE \
-+    -DUSE_WEBP:BOOL=TRUE \
-+    -DSTOP_ON_WARNING:BOOL=FALSE
-+
+ # optional components
+ 
+-#configure.args-append   -DUSE_OPENGL=OFF \
+-#                        -DUSE_QT=OFF
+-qt5.depends_component   qtbase
+-qt5.min_version         5.6
 +# we need gcc atomics (clang >= 3.5 maybe?, gcc >= 4.8 works)
 +# tested with openimageio 1.4.6rc1:
 +# macports-clang-3.3 and later work
@@ -84,7 +65,7 @@
 +
 +# GCC < 4.9 does not have proper GCC intrinsics support
 +compiler.blacklist-append {*gcc-4.8}
-+compiler.whitelist-append macports-clang-8.0 macports-clang-7.0 macports-clang-6.0 macports-clang-5.0 macports-clang-4.0 macports-gcc-7 macports-gcc-6 macports-gcc-5 {*gcc-4.9}
++#compiler.whitelist-append macports-clang-9.0 macports-clang-8.0 macports-clang-7.0 macports-clang-6.0 macports-clang-5.0 macports-clang-4.0 macports-gcc-7 macports-gcc-6 macports-gcc-5 {*gcc-4.9}
 +
 +# The PowerPC build requires GCC >= 4.9, which doesn't recognize the -arch flag, and requires libatomic
 +# Unfortunately, the resulting binaries don't work (at least on PPC), so we build without threads
@@ -105,13 +86,29 @@
 +    #configure.args-append -DCMAKE_SHARED_LINKER_FLAGS=-latomic -DCMAKE_EXE_LINKER_FLAGS=-latomic
 +}
 +
- # optional components
- 
--#configure.args-append \
--#    -DUSE_OPENGL=OFF \
--#    -DUSE_QT=OFF
--qt5.depends_component qtbase
--qt5.min_version       5.6
++configure.args-append \
++    -DOIIO_BUILD_TESTS:BOOL=FALSE \
++    -DBOOST_ROOT=${prefix} \
++    -DUSE_QT:BOOL=FALSE \
++    -DUSE_PYTHON:BOOL=FALSE \
++    -DUSE_PYTHON3:BOOL=FALSE \
++    -DUSE_FIELD3D:BOOL=FALSE \
++    -DUSE_FFMPEG:BOOL=FALSE \
++    -DUSE_OPENJPEG:BOOL=FALSE \
++    -DUSE_OCIO:BOOL=FALSE \
++    -DUSE_OPENCV:BOOL=FALSE \
++    -DUSE_OPENSSL:BOOL=FALSE \
++    -DUSE_FREETYPE:BOOL=FALSE \
++    -DUSE_GIF:BOOL=TRUE \
++    -DUSE_HEIF:BOOL=TRUE \
++    -DUSE_PTEX:BOOL=FALSE \
++    -DUSE_LIBRAW:BOOL=TRUE \
++    -DUSE_OPENGL:BOOL=FALSE \
++    -DUSE_WEBP:BOOL=TRUE \
++    -DSTOP_ON_WARNING:BOOL=FALSE
++
++# optional components
++
 +default_variants    +opencolorio +openjpeg +freetype
 +
 +variant natron conflicts ffmpeg qt5 dicom openvdb ptex dicom requires opencolorio openjpeg freetype description {Natron version} {
@@ -124,7 +121,8 @@
 +    configure.args-delete       -DUSE_OCIO:BOOL=FALSE
 +    configure.args-append       -DUSE_OCIO:BOOL=TRUE
 +}
-+
+ 
+-configure.args-append   -DUSE_PYTHON=OFF
 +variant ffmpeg description {Add FFmpeg support.} {
 +    depends_lib-append  port:ffmpeg
 +    configure.args-delete       -DUSE_FFMPEG:BOOL=FALSE
@@ -136,81 +134,7 @@
 +    configure.args-delete       -DUSE_OPENJPEG:BOOL=FALSE
 +    configure.args-append       -DUSE_OPENJPEG:BOOL=TRUE -DOPENJPEG_HOME=${prefix} -DOPENJPEG_INCLUDE_DIR=`pkg-config --variable=includedir libopenjp2`
 +}
- 
- variant python27 description {Build the Python 2.7 bindings} conflicts python36 python37 {
-     depends_lib-append \
-@@ -83,9 +173,9 @@
-         -DPYTHON_SITE_DIR=${frameworks_dir}/Python.framework/Versions/3.7/lib/python3.7
- }
- 
--if {![variant_isset python36] && ![variant_isset python37]} {
--    default_variants +python27
--}
-+#if {![variant_isset python36] && ![variant_isset python37]} {
-+#    default_variants +python27
-+#}
- 
- if {![variant_isset python27] && ![variant_isset python36] && ![variant_isset python37]} {
-     configure.args-append \
-@@ -95,63 +185,55 @@
-         port:pybind11
- }
- 
--#configure.args-append \
--#    -DUSE_FIELD3D=OFF
--depends_lib-append port:field3d
--
--#configure.args-append \
--#    -DUSE_FFMPEG=OFF
--depends_lib-append port:ffmpeg
- 
--# conflicts with jpeg
--configure.args-append \
--    -DUSE_JPEGTURBO=OFF
--#depends_lib-append port:libjpeg-turbo
-+variant qt5 description {Build the Qt-based image viewer.} {
-+#    qt5.depends_component qtbase
-+#    qt5.min_version       5.6
-+    configure.args-delete -DUSE_QT:BOOL=FALSE
-+    configure.args-append -DUSE_QT:BOOL=TRUE
-+    configure.args-delete -DUSE_OPENGL:BOOL=FALSE
-+    configure.args-append -DUSE_OPENGL:BOOL=TRUE
-+    depends_lib-append port:qt4-mac
-+}
- 
--#configure.args-append \
--#    -DUSE_OPENJPEG=OFF
--depends_lib-append port:openjpeg
--
--#configure.args-append \
--#    -DUSE_OCIO=OFF
--depends_lib-append port:opencolorio
--
--#configure.args-append \
--#    -DUSE_OPENCV=OFF
--depends_lib-append port:opencv
--
--#configure.args-append \
--#    -DUSE_FREETYPE=OFF
--depends_lib-append port:freetype
--
--#configure.args-append \
--#    -DUSE_GIF=OFF
--depends_lib-append port:giflib
--
--#configure.args-append \
--#    -DUSE_PTEX=OFF
--depends_lib-append port:ptex
--
--#configure.args-append \
--#    -DUSE_LIBRAW=OFF
--depends_lib-append port:libraw
--
--#configure.args-append \
--#    -DUSE_TBB=OFF     \
--#    -DUSE_OPENVDB=OFF
--depends_lib-append port:tbb \
--                   port:openvdb
++
 +variant field3d description {Use Field3D.} {
 +    configure.args-delete -DUSE_FIELD3D:BOOL=FALSE
 +    configure.args-append -DUSE_FIELD3D:BOOL=TRUE
@@ -222,18 +146,8 @@
 +    configure.args-append -DUSE_FREETYPE:BOOL=TRUE -DFREETYPE_INCLUDE_DIRS=${prefix}/include/freetype2
 +    depends_lib-append port:freetype
 +}
- 
--# not in MacPorts
--configure.args-append \
--    -DUSE_NUKE=OFF
- 
--#configure.args-append \
--#    -DUSE_DICOM=OFF
--depends_lib-append port:dcmtk
--
--#configure.args-append \
--#    -DUSE_WEBP=OFF
--depends_lib-append port:webp
++
++
 +variant opencv description {Use OpenCV.} {
 +    configure.args-delete -DUSE_OPENCV:BOOL=FALSE
 +    configure.args-append -DUSE_OPENCV:BOOL=TRUE
@@ -261,4 +175,73 @@
 +    depends_lib-append port:dcmtk
 +}
  
- livecheck.regex     archive/Release-(\\d+(?:\\.\\d+)*)${extract.suffix}
+ set pythons_suffixes    {27 36 37 38}
+ 
+@@ -86,31 +214,31 @@
+ }
+ # this default version should stay synchronized with python_get_default_version
+ #    in the python PortGroup
+-if {${set_python_default}} {
+-    default_variants        +python37
+-}
++#if {${set_python_default}} {
++#    default_variants        +python37
++#}
+ 
+ #configure.args-append       -DUSE_FIELD3D=OFF
+-depends_lib-append          port:field3d
++#depends_lib-append          port:field3d
+ 
+ #configure.args-append       -DUSE_FFMPEG=OFF
+-depends_lib-append          port:ffmpeg
++#depends_lib-append          port:ffmpeg
+ 
+ # conflicts with jpeg
+-configure.args-append       -DUSE_JPEGTURBO=OFF
++#configure.args-append       -DUSE_JPEGTURBO=OFF
+ #depends_lib-append          port:libjpeg-turbo
+ 
+ #configure.args-append       -DUSE_OPENJPEG=OFF
+-depends_lib-append          port:openjpeg
++#depends_lib-append          port:openjpeg
+ 
+ #configure.args-append       -DUSE_OCIO=OFF
+-depends_lib-append          port:opencolorio
++#depends_lib-append          port:opencolorio
+ 
+ #configure.args-append       -DUSE_OPENCV=OFF
+-depends_lib-append          port:opencv
++#depends_lib-append          port:opencv
+ 
+ #configure.args-append       -DUSE_FREETYPE=OFF
+-depends_lib-append          port:freetype
++#depends_lib-append          port:freetype
+ 
+ #configure.args-append       -DUSE_GIF=OFF
+ depends_lib-append          port:giflib
+@@ -119,21 +247,21 @@
+ depends_lib-append          port:libheif
+ 
+ #configure.args-append       -DUSE_PTEX=OFF
+-depends_lib-append          port:ptex
++#depends_lib-append          port:ptex
+ 
+ #configure.args-append       -DUSE_LIBRAW=OFF
+ depends_lib-append          port:libraw
+ 
+ #configure.args-append       -DUSE_TBB=OFF \
+ #                            -DUSE_OPENVDB=OFF
+-depends_lib-append          port:tbb \
+-                            port:openvdb
++#depends_lib-append          port:tbb \
++#                            port:openvdb
+ 
+ # not in MacPorts
+ configure.args-append       -DUSE_NUKE=OFF
+ 
+ #configure.args-append       -DUSE_DICOM=OFF
+-depends_lib-append          port:dcmtk
++#depends_lib-append          port:dcmtk
+ 
+ #configure.args-append       -DUSE_WEBP=OFF
+ depends_lib-append          port:webp

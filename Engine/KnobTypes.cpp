@@ -1,6 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
  * This file is part of Natron <https://natrongithub.github.io/>,
  * Copyright (C) 2013-2018 INRIA and Alexandre Gauthier-Foichat
+ * Copyright (C) 2018-2020 The Natron developers
  *
  * Natron is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -607,6 +608,7 @@ KnobChoice::cloneExtraData(KnobI* other,
                            int /*dimension*/,
                            int /*otherDimension*/)
 {
+    // TODO: Isn't this redundant, as it's implementation is identical to the other cloneExtraData?
     KnobChoice* isChoice = dynamic_cast<KnobChoice*>(other);
 
     if (!isChoice) {
@@ -1140,6 +1142,7 @@ KnobChoice::choiceRestoration(KnobChoice* knob,
 {
     assert(knob);
 
+
     ///Clone first and then handle restoration of the static value
     clone(knob);
     setSecret( knob->getIsSecret() );
@@ -1161,7 +1164,7 @@ KnobChoice::choiceRestoration(KnobChoice* knob,
     }
 
     if (id >= 0) {
-        setValue(id);
+        setValue(id, ViewSpec::all(), 0, eValueChangedReasonNatronInternalEdited, NULL, true);
     }
 }
 

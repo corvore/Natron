@@ -1,6 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
  * This file is part of Natron <https://natrongithub.github.io/>,
  * Copyright (C) 2013-2018 INRIA and Alexandre Gauthier-Foichat
+ * Copyright (C) 2018-2020 The Natron developers
  *
  * Natron is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -643,6 +644,12 @@ GuiPrivate::restoreGuiGeometry()
         QRect screen = desktop->screenGeometry();
         _gui->resize( (int)( 0.93 * screen.width() ), (int)( 0.93 * screen.height() ) ); // leave some space
     }
+    if ( settings.contains( QString::fromUtf8("maximized")) ) {
+        bool maximized = settings.value( QString::fromUtf8("maximized") ).toBool();
+        if (maximized) {
+            _gui->showMaximized();
+        }
+    }
     if ( settings.contains( QString::fromUtf8("fullScreen") ) ) {
         bool fs = settings.value( QString::fromUtf8("fullScreen") ).toBool();
         if (fs) {
@@ -707,6 +714,7 @@ GuiPrivate::saveGuiGeometry()
     settings.setValue( QString::fromUtf8("pos"), _gui->pos() );
     settings.setValue( QString::fromUtf8("size"), _gui->size() );
     settings.setValue( QString::fromUtf8("fullScreen"), _gui->isFullScreen() );
+    settings.setValue( QString::fromUtf8("maximized"), _gui->isMaximized() );
     settings.setValue( QString::fromUtf8("ToolbarHidden"), leftToolBarDisplayedOnHoverOnly);
     settings.endGroup();
 

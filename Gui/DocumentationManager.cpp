@@ -1,6 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
  * This file is part of Natron <https://natrongithub.github.io/>,
  * Copyright (C) 2013-2018 INRIA and Alexandre Gauthier-Foichat
+ * Copyright (C) 2018-2020 The Natron developers
  *
  * Natron is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -335,6 +336,8 @@ DocumentationManager::handler(QHttpRequest *req,
         html = parser(html, docDir);
         body = html.toUtf8();
     } else if ( page == QString::fromUtf8("_group.html") ) {
+#pragma message WARN("TODO: produce HTML from file templates")
+        // TODO: we should really read and parse _group.html or _groupChannel.html and just replace the relevant sections
         QString html;
         QString group;
         QString groupHeader = QString::fromUtf8("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
@@ -435,7 +438,7 @@ DocumentationManager::handler(QHttpRequest *req,
                                                        "<div class=\"toctree-wrapper compound\">"
                                                        "<ul>")
                                      .arg( tr("Reference Guide") )
-            .arg ( tr("The first section in this manual describes the various options available from the %1 preference settings. It is followed by one section for each node group in %1.")
+            .arg ( tr("The first section in this manual describes the various options available from the %1 preference settings. The next section gives the documentation for the various environment variables that may be used to control %1's behavior. It is followed by one section for each node group in %1.")
                   .arg( QString::fromUtf8(NATRON_APPLICATION_NAME) ) + QLatin1Char(' ') + tr("Node groups are available by clicking on buttons in the left toolbar, or by right-clicking the mouse in the Node Graph area.") + QLatin1Char(' ') + tr("Please note that documentation is also generated automatically for third-party OpenFX plugins.") );
             html.append(groupHeader);
             html.replace( QString::fromUtf8("__REPLACE_TITLE__"), tr("Reference Guide") );
@@ -496,7 +499,12 @@ DocumentationManager::handler(QHttpRequest *req,
                              page.endsWith( QString::fromUtf8(".js") ) ||
                              page.endsWith( QString::fromUtf8(".txt") ) ||
                              page.endsWith( QString::fromUtf8(".png") ) ||
-                             page.endsWith( QString::fromUtf8(".jpg") ) ) ) {
+                             page.endsWith( QString::fromUtf8(".jpg") ) ||
+                             page.endsWith( QString::fromUtf8(".ttf") ) ||
+                             page.endsWith( QString::fromUtf8(".eot") ) ||
+                             page.endsWith( QString::fromUtf8(".svg") ) ||
+                             page.endsWith( QString::fromUtf8(".woff") ) ||
+                             page.endsWith( QString::fromUtf8(".woff2") ) ) ) {
         // get static file
         QFileInfo staticFileInfo;
 

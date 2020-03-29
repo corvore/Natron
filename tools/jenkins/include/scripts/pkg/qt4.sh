@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # Qt4
+if download_step; then
+    download "$QT4_SITE" "$QT4_TAR"
+fi
 if build_step && { force_build || { [ "${REBUILD_QT4:-}" = "1" ]; }; }; then
     rm -rf "$QT4PREFIX" || true
 fi
@@ -30,7 +33,6 @@ if build_step && { force_build || { [ ! -s "$QT4PREFIX/lib/pkgconfig/QtCore.pc" 
     # disable openvg
     QT_CONF+=( "-no-openvg" )
     
-    download "$QT4_SITE" "$QT4_TAR"
     untar "$SRC_PATH/$QT4_TAR"
     pushd "qt-everywhere-opensource-src-${QT4_VERSION}"
 
@@ -254,7 +256,7 @@ if build_step && { force_build || { [ ! -s "$QT4PREFIX/lib/pkgconfig/QtCore.pc" 
 	    patch -Np0 -i "$INC_PATH/patches/Qt/patch-qt4-openssl111.diff" # -p1 -b .openssl1.1
     fi
     patch -Np1 -i "$INC_PATH/patches/Qt/$Patch95" # -p1 -b .icu59
-    if vergion_gt "$GCC_VERSION" 7.99; then
+    if version_gt "$GCC_VERSION" 7.99; then
 	    patch -Np1 -i "$INC_PATH/patches/Qt/$Patch96" # -p1 -b .gcc8_qtscript
     fi
 
